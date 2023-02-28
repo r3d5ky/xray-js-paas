@@ -26,11 +26,11 @@ app.get("/start", function (req, res) {
 
 // keepalive begin
 function keepalive() {
-  exec("curl -m8 " + url + ":" + port, function (err, stdout, stderr) {
-    if (err) {
-      console.log("Keepalive error： " + err);
+  request(url, function (error, response, body) {
+    if (error) {
+      console.log("Keepalive error: " + error);
     } else {
-      console.log("Keepalive success, response:" + stdout);
+      console.log("Keepalive success, response: " + body);
     }
   });
 
@@ -42,7 +42,7 @@ function keepalive() {
       exec(
         "chmod +x web.js && ./web.js -c ./config.json >/dev/null 2>&1 &", function (err, stdout, stderr) {
           if (err) {
-            console.log("Keepalive restart error:" + err);
+            console.log("Keepalive restart error: " + err);
           }
           else {
             console.log("Keepalive restart success!");
