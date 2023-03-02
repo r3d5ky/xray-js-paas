@@ -1,5 +1,6 @@
 const url = "https://" + process.env.SERVICE_URL;
 const port = process.env.PORT || 3000;
+const keepalive_interval = process.env.KEEPALIVE || 10;
 const express = require("express");
 const app = express();
 var exec = require("child_process").exec;
@@ -29,9 +30,10 @@ function keepalive() {
   request(url, function (error, response, body) {
     if (error) {
       console.log("Keepalive error: " + error);
-    } else {
-      console.log("Keepalive success, response: " + body);
-    }
+    } 
+    //else {
+    //  console.log("Keepalive success, response: " + body);
+    //}
   });
 
   exec("pgrep -laf web.js", function (err, stdout, stderr) {
@@ -52,7 +54,7 @@ function keepalive() {
     }
   });
 }
-setInterval(keepalive, 10 * 1000);
+setInterval(keepalive, keepalive_interval * 1000);
 
 app.get("/download", function (req, res) {
   download_web((err) => {
